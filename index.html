@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Shopping Cart</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
+   <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+
+   <section>
+      <div class="container">
+         <h2>My shopping cart</h2>
+         <div class="cart">
+            <div class="col-md-12 col-lg-10 mx-auto">
+               <div class="cart-item">
+                  <div class="row">
+                     <div class="col-md-7 center-item">
+                        <img src="images/product-1.png" alt="">
+                        <h5>iPhone 11 128GB Black</h5>
+                     </div>
+
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button id='minus1' class="btn btn-default"><i  class="fas fa-minus"></i></button>
+                           <input type="number" min="0" class="form-control text-center" id='number1' value="1">
+                           <button id='plus1' class="btn btn-default"><i  class="fas fa-plus plus"></i></button>
+                        </div>
+                        <h5>$  <span id="price1">1219</span> </h5>
+                        <img src="images/remove.png" alt="" class="remove-item">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cart-item">
+                  <div class="row">
+                     <div class="col-md-7 center-item mx-auto">
+                        <img src="images/product-2.png" alt="">
+                        <h5>iPhone 11 Silicone Case - Black</h5>
+                     </div>
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button id="minus2" class="btn btn-default"><i  class="fas fa-minus"></i></button>
+                           <input type="number" min="0" id="number2" class="form-control text-center" value="1">
+                           <button id='plus2'  class="btn btn-default"><i class="fas fa-plus plus"></i></button>
+
+                        </div>
+                        <h5><span id="price2">59</span></h5>
+                        <img src="images/remove.png" alt="" class="remove-item">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cart-item">
+                  <div class="row">
+
+                     <div class="col-md-8">
+                        <h5>Subtotal: </h5>
+                        <h5>Tax:</h5>
+                        <h5>Total:</h5>
+                     </div>
+
+                     <div class="col-md-4 status">
+                        <h5>$<span id="subTotal">1278</span></h5>
+                        <h5>$<span id="tax">120</span></h5>
+                        <h5>$<span id="total">1398</span></h5>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12 pt-4 pb-4">
+                  <button type="button" class="btn btn-success check-out">Check Out</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <script src="app.js">    
+   </script>
+   <script>
+      function updateProduct(numberId,priceId,price,isAdd) {
+            const productInput = document.getElementById(numberId);
+            let productNumber = parseInt(productInput.value);
+            if (isAdd == true) {
+               productNumber = productNumber + 1
+            }
+            else if(isAdd == false && productNumber>0){
+               productNumber = productNumber - 1
+            }
+            productInput.value=productNumber;
+            const productTotalPrice = document.getElementById(priceId);
+            const mobilePrice=parseFloat(productTotalPrice.innerText);
+            productTotalPrice.innerText=productNumber*price;
+            totalPrice=parseFloat(productTotalPrice.innerText)
+           
+               totalPriceCalculation();
+            
+         }
+         function inputValue(numberId){
+            const productInput=document.getElementById(numberId);
+            const productNumber=parseInt(productInput.value);
+             return productNumber;   
+
+         }
+        function  totalPriceCalculation(){
+             const mobilePrice=inputValue('number1')*1219;
+             const casePrice=inputValue('number2')*59;
+             const subTotal=document.getElementById('subTotal');
+             let subTotalValue=parseFloat(subTotal.innerText);
+               subTotalValue=mobilePrice+casePrice;
+             subTotal.innerText=subTotalValue;
+             const taxPrice=document.getElementById('tax');
+             taxPrice.innerText=(subTotalValue*(10/100)).toFixed(0);
+             const taxPriceTotal=parseFloat(taxPrice.innerText);
+             const totalPrice=document.getElementById('total');
+             totalPrice.innerText=(subTotalValue+taxPriceTotal).toFixed(0);
+          }
+         document.getElementById('plus1').addEventListener('click', function () {
+            updateProduct('number1','price1',1219,true)
+         })
+
+         document.getElementById('minus1').addEventListener('click', function () {
+            updateProduct('number1','price1',1219,false)
+
+         })
+         document.getElementById('plus2').addEventListener('click',function(){
+            updateProduct("number2",'price2',59,true)
+         })
+         document.getElementById('minus2').addEventListener('click',function(){
+            updateProduct("number2",'price2',59,false)
+         })
+         function keyUpCheck(numberId,priceId,price){
+            document.getElementById(numberId).addEventListener('keyup',function(){
+            const mobileInput=inputValue(numberId);
+            const mobileTotalPrice=document.getElementById(priceId);
+            let mobilePriceNumber=parseFloat(mobileTotalPrice.innerText);
+            if(mobileInput>=0){
+               mobilePriceNumber=mobileInput*price;
+               totalPriceCalculation() 
+            }
+           
+            mobileTotalPrice.innerText=mobilePriceNumber;
+            
+         })
+         }
+         keyUpCheck('number1','price1',1219);
+         keyUpCheck('number2','price2',59);
+      
+    
+   </script>
+</body>
+
+</html>
